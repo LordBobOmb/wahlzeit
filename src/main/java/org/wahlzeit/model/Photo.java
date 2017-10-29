@@ -125,6 +125,11 @@ public class Photo extends DataObject {
 	/**
 	 *
 	 */
+	protected Location location;
+	
+	/**
+	 * 
+	 */
 	//TODO: change it to a single long
 	@Id
 	Long idLong;
@@ -417,5 +422,26 @@ public class Photo extends DataObject {
 	public void setNoNewPraise() {
 		noVotesAtLastNotification = noVotes;
 		incWriteCount();
+	}
+	
+	/**
+	 * @methodtype get
+	 */
+	public Location getLocation() {
+		return location;
+	}
+	
+	/**
+	 * @methodtype set
+	 */
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+	
+	/**
+	 * @methodtype boolean-query
+	 */
+	public boolean hasLocation() {
+		return this.location != null;
 	}
 }
