@@ -1,7 +1,7 @@
-package org.wahlzeit.utils;
-
 import org.junit.runner.*;
 import org.junit.runners.*;
+
+//TestSuite that runs all other TestSuites
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
