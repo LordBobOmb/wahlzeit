@@ -60,6 +60,7 @@ public class EmailServiceTest {
 		}
 	}
 	
+	
 	@Test
 	public void testSendInvalidEmailException(){
 		try {
@@ -69,4 +70,5 @@ public class EmailServiceTest {
 			//expected Exception => pass
 		}	
 	}
+
 }
