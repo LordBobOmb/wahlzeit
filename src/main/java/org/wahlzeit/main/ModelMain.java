@@ -20,6 +20,7 @@
 
 package org.wahlzeit.main;
 
+import org.wahlzeit.model.BirdPhotoFactory;
 import org.wahlzeit.model.BirdPhotoManager;
 import org.wahlzeit.model.GlobalsManager;
 import org.wahlzeit.model.PhotoCaseManager;
@@ -61,10 +62,10 @@ public abstract class ModelMain extends AbstractMain {
 		UserManager.getInstance().init();
 
 		log.config(LogBuilder.createSystemMessage().addAction("init PhotoFactory").toString());
-		PhotoFactory.initialize();
+		BirdPhotoFactory.initialize();
 
 		log.config(LogBuilder.createSystemMessage().addAction("load Photos").toString());
-		PhotoManager.getInstance().init();
+		BirdPhotoManager.getInstance().init();
 	}
 
 
