@@ -69,12 +69,21 @@ public class CoordinateTest {
 	}
 	
 	@Test
-	public void testCartesianCoordinateDistance() {
+	public void testCartesianDistance() {
 		CartesianCoordinate cart2 = new CartesianCoordinate(5, 2.5, 4);
 		assertEquals(cart2.getDistance(cart), 3, EPSILON);
 		assertEquals(cart.getDistance(cart2), 3, EPSILON);
 		SphericCoordinate sph2 = cart2.asSphericCoordinate();
 		assertEquals(cart.getCartesianDistance(sph2), 3, EPSILON);
+	}
+	
+	@Test
+	public void testSphericDistance() {
+		double moonRadius = 1737.4;
+		SphericCoordinate sph2 = new SphericCoordinate(2, 2.5, moonRadius);
+		SphericCoordinate sph3 = new SphericCoordinate(-2, 3, moonRadius);;
+		double dist = 122.23695151981917;
+		assertEquals(dist, sph2.getDistance(sph3), EPSILON);
 	}
 	
 	
