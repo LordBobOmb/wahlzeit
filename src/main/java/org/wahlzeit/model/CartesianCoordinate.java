@@ -23,7 +23,7 @@ package org.wahlzeit.model;
 /*
  * represents a geographic coordinate in the cartesian model and provides methods to deal with them
  */
-public class CartesianCoordinate implements Coordinate{
+public class CartesianCoordinate extends AbstractCoordinate{
 
 	private double x;
 	private double y;
@@ -36,36 +36,6 @@ public class CartesianCoordinate implements Coordinate{
 		this.z = z;
 	}
 
-	public double getCartesianDistance(Coordinate to) {
-		CartesianCoordinate convertedCoord = to.asCartesianCoordinate();
-		double xDiff = convertedCoord.x - this.x;
-		double yDiff = convertedCoord.y - this.y;
-		double zDiff = convertedCoord.z - this.z;
-		
-		return Math.sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff);
-	}
-	
-	public boolean isEqual(Coordinate to) {
-		double delta = 0.00001;
-		CartesianCoordinate convertedCoord = to.asCartesianCoordinate();
-		return Math.abs(convertedCoord.x - this.x) <= delta
-				&& Math.abs(convertedCoord.y - this.y) <= delta
-				&& Math.abs(convertedCoord.z - this.z) <= delta;
-	}
-	
-	
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Coordinate other = (Coordinate) obj;
-		return this.isEqual(other);
-	}
 
 	@Override
 	public int hashCode() {
@@ -103,17 +73,7 @@ public class CartesianCoordinate implements Coordinate{
 		double radius = Math.sqrt(x*x + y*y + z*z);
 		double latitude = Math.acos(z/radius);
 		double longitude = Math.atan(y/x);
-		return new SphericCoordinate(radius, latitude, longitude);
+		return new SphericCoordinate(latitude, longitude, radius);
 	}
 
-	@Override
-	public double getSphericDistance(Coordinate to) {
-		SphericCoordinate convThis = this.asSphericCoordinate();
-		return convThis.getSphericDistance(to);
-	}
-
-	@Override
-	public double getDistance(Coordinate to) {
-		return getCartesianDistance(to);
-	}
 }

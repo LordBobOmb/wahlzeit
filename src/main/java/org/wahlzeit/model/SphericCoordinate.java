@@ -22,10 +22,10 @@ package org.wahlzeit.model;
 /*
  * represents a geographic coordinate in the spheric model and provides methods to deal with them
  */
-public class SphericCoordinate implements Coordinate {
+public class SphericCoordinate extends AbstractCoordinate {
 
-	private double latitude; //theta
-	private double longitude; //phi
+	private double latitude;
+	private double longitude;
 	private double radius;
 	
 
@@ -34,7 +34,7 @@ public class SphericCoordinate implements Coordinate {
 		this.longitude = longitude;
 		this.radius = radius;
 	}
-
+	
 	public double getLatitude() {
 		return latitude;
 	}
@@ -67,25 +67,6 @@ public class SphericCoordinate implements Coordinate {
 	}
 
 	@Override
-	public double getSphericDistance(Coordinate to) {
-		SphericCoordinate convTo = to.asSphericCoordinate();
-		double delta = Math.acos(Math.sin(this.getLatitude()) * Math.sin(convTo.getLatitude())
-				+ Math.cos(this.getLatitude()) * Math.cos(convTo.getLatitude()) * Math.cos(this.getLatitude() - convTo.getLatitude()));
-		return this.getRadius() * delta;
-	}
-
-	@Override
-	public double getDistance(Coordinate to) {
-		return getSphericDistance(to);
-	}
-
-	public boolean isEqual(Coordinate to) {
-		double delta = 0.00001;
-		SphericCoordinate convertedCoord = to.asSphericCoordinate();
-		return getDistance(convertedCoord) <= delta;
-	}
-
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -97,18 +78,6 @@ public class SphericCoordinate implements Coordinate {
 		temp = Double.doubleToLongBits(radius);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		return isEqual((SphericCoordinate) obj);
-		
 	}
 
 }

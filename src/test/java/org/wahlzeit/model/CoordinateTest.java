@@ -30,54 +30,52 @@ import org.junit.Before;
 public class CoordinateTest {
 	
 	private Location testLocation;
-	private Coordinate testCoordinate;
+	private SphericCoordinate sph;
+	private CartesianCoordinate cart;
+	private final double EPSILON = 0.00001;
 	
 	@Before
 	public void setup() {
-		testCoordinate = new Coordinate(2, 2.5, 4);
-		testLocation = new Location(testCoordinate);
+		sph = new SphericCoordinate(2, 2.5, 4);
+		cart = new CartesianCoordinate(2, 2.5, 4);
+		testLocation = new Location(sph);
 		
 	}
 	
 	@Test
+	public void testLocationInit() {
+		assertTrue(testLocation.getCoordinate() instanceof SphericCoordinate);
+		testLocation.setCoordinate(cart);
+		assertTrue(testLocation.getCoordinate() instanceof CartesianCoordinate);
+	}
+	
+	@Test
 	public void testEquals() {
-		Coordinate testCoordinate2 = new Coordinate(2, 2.5, 4);
-		assertTrue(testCoordinate.isEqual(testCoordinate2));
-		assertTrue(testCoordinate.equals(testCoordinate2));
+		
+		SphericCoordinate sph2 = new SphericCoordinate(2, 2.5, 4);
+		assertTrue(sph.isEqual(sph2));
+		assertTrue(sph.equals(sph2));
+		
+		assertTrue(cart.asSphericCoordinate().asCartesianCoordinate().equals(cart));
+		assertTrue(sph.asCartesianCoordinate().asSphericCoordinate().equals(sph));
 	}
 	
 	@Test
-	public void testEqualsNegativeCase() {
-		Coordinate testCoordinate2 = new Coordinate(1, 1 , 4);
-		assertFalse(testCoordinate.isEqual(testCoordinate2));
-		assertFalse(testCoordinate.equals(testCoordinate2));
+	public void testEqualsNegativeCase(){
+		assertFalse(sph.equals(cart));
+		assertFalse(sph.isEqual(cart));
+		assertFalse(sph.asCartesianCoordinate().equals(cart));
+		assertFalse(cart.asSphericCoordinate().isEqual(sph));
 	}
 	
 	@Test
-	public void testGetCoordinate() {
-		assertTrue(testCoordinate.equals(testLocation.getCoordinate()));
+	public void testCartesianCoordinateDistance() {
+		CartesianCoordinate cart2 = new CartesianCoordinate(5, 2.5, 4);
+		assertEquals(cart2.getDistance(cart), 3, EPSILON);
+		assertEquals(cart.getDistance(cart2), 3, EPSILON);
+		SphericCoordinate sph2 = cart2.asSphericCoordinate();
+		assertEquals(cart.getCartesianDistance(sph2), 3, EPSILON);
 	}
-	
-	@Test
-	public void testSetCoordinate() {
-		Coordinate newCoordinate = new Coordinate(5, 2, 420);
-		testLocation.setCoordinate(newCoordinate);
-		assertTrue(newCoordinate.equals(testLocation.getCoordinate()));
-	}
-	
-	@Test
-	public void testCoordinateDistance() {
-		Coordinate testCoordinate2 = new Coordinate(5, 2.5, 4);
-		assertEquals(testCoordinate2.getDistance(testCoordinate), 3, 0.0001);
-	}
-	
-	@Test
-	public void testCoordinateDistance2() {
-		Coordinate testCoordinate2 = new Coordinate(6, 1.7, 9.5);
-		double dist = Math.sqrt(4*4 + 0.8 * 0.8 + 5.5*5.5);
-		assertEquals(testCoordinate2.getDistance(testCoordinate), dist, 0.0001);
-	}
-	
 	
 	
 }
