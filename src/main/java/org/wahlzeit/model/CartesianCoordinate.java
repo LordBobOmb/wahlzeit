@@ -34,11 +34,20 @@ public class CartesianCoordinate extends AbstractCoordinate{
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		assert assertClassInvariant();
 	}
 
+	//tests for realistic values in coordinate values
+	private boolean assertClassInvariant() {
+		double limit = 15e6;	//earth radius is about 6e6 m, for pictures on earth you shouldn't need more
+		return Math.abs(x) < limit && Math.abs(y) < limit && Math.abs(z) < limit;
+	}
 
 	@Override
 	public int hashCode() {
+		assert assertClassInvariant();
+		double oldX = x, oldY = y, oldZ = z;
+		
 		final int prime = 31;
 		int result = 1;
 		long temp;
@@ -48,31 +57,58 @@ public class CartesianCoordinate extends AbstractCoordinate{
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(z);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
+		
+		assert oldX == x && oldY == y && oldZ == z;	//post-condition
+		assert assertClassInvariant();
 		return result;
 	}
 
 	public double getX() {
+		assert assertClassInvariant();
 		return x;
 	}
 
 	public double getY() {
+		assert assertClassInvariant();
 		return y;
 	}
 
+	protected void setX(double x) {
+		this.x = x;
+		assert assertClassInvariant();
+	}
+
+	protected void setY(double y) {
+		this.y = y;
+		assert assertClassInvariant();
+	}
+
+	protected void setZ(double z) {
+		this.z = z;
+		assert assertClassInvariant();
+	}
+
 	public double getZ() {
+		assert assertClassInvariant();
 		return z;
 	}
 
 	@Override
 	public CartesianCoordinate asCartesianCoordinate() {
+		assert assertClassInvariant();
 		return this;
 	}
 
 	@Override
 	public SphericCoordinate asSphericCoordinate() {
+		assert assertClassInvariant();
+		double oldX = x, oldY = y, oldZ = z;
 		double radius = Math.sqrt(x*x + y*y + z*z);
 		double latitude = Math.acos(z/radius);
 		double longitude = Math.atan(y/x);
+		
+		assert oldX == x && oldY == y && oldZ == z;	//post-condition
+		assert assertClassInvariant();
 		return new SphericCoordinate(latitude, longitude, radius);
 	}
 

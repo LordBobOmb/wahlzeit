@@ -33,35 +33,52 @@ public class SphericCoordinate extends AbstractCoordinate {
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.radius = radius;
+		assert assertClassInvariant();
 	}
 	
+	//tests for realistic values in coordinate values
+	private boolean assertClassInvariant() {
+		return Math.abs(latitude) <= 90 && Math.abs(longitude) <= 180 
+				&& radius > 0 && radius < 15e6;
+	}
 	public double getLatitude() {
+		assert assertClassInvariant();
 		return latitude;
 	}
 
 	public double getLongitude() {
+		assert assertClassInvariant();
 		return longitude;
 	}
 
 	public double getRadius() {
+		assert assertClassInvariant();
 		return radius;
 	}
 
 	@Override
 	public CartesianCoordinate asCartesianCoordinate() {
+		assert assertClassInvariant();
+		double oldLat = latitude, oldLong = longitude, oldRad = radius;
+		
 		double convertedX = radius * Math.sin(latitude) * Math.cos(longitude);
 		double convertedY = radius * Math.sin(latitude) * Math.sin(longitude);
 		double convertedZ = radius * Math.cos(latitude);
+		
+		assert oldLat == latitude && oldLong == longitude && oldRad == radius;
 		return new CartesianCoordinate(convertedX, convertedY, convertedZ);
 	}
 
 	@Override
 	public SphericCoordinate asSphericCoordinate() {
+		assert assertClassInvariant();
 		return this;
 	}
 
 	@Override
 	public int hashCode() {
+		assert assertClassInvariant();
+		double oldLat = latitude, oldLong = longitude, oldRad = radius;
 		final int prime = 31;
 		int result = 1;
 		long temp;
@@ -71,7 +88,24 @@ public class SphericCoordinate extends AbstractCoordinate {
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(radius);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
+		assert oldLat == latitude && oldLong == longitude && oldRad == radius;
+		assert assertClassInvariant();
 		return result;
+	}
+
+	protected void setLatitude(double latitude) {
+		this.latitude = latitude;
+		assert assertClassInvariant();
+	}
+
+	protected void setLongitude(double longitude) {
+		this.longitude = longitude;
+		assert assertClassInvariant();
+	}
+
+	protected void setRadius(double radius) {
+		this.radius = radius;
+		assert assertClassInvariant();
 	}
 
 }
