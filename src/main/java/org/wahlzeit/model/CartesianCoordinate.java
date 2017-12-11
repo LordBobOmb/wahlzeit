@@ -29,23 +29,29 @@ public class CartesianCoordinate extends AbstractCoordinate{
 	private double y;
 	private double z;
 	
+	private final double LIMIT = 15e6;	//earth radius is about 6e6 m, for pictures on earth you shouldn't need more
 	
+
 	public CartesianCoordinate(double x, double y, double z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		assert assertClassInvariant();
+		try{setX(x);
+		setY(y);
+		setZ(z); 
+		} catch (IllegalArgumentException e) {
+			x = 0;
+			y = 0;
+			z = 0;
+		}
+		assertClassInvariant();
 	}
 
 	//tests for realistic values in coordinate values
-	private boolean assertClassInvariant() {
-		double limit = 15e6;	//earth radius is about 6e6 m, for pictures on earth you shouldn't need more
-		return Math.abs(x) < limit && Math.abs(y) < limit && Math.abs(z) < limit;
+	private void assertClassInvariant() {
+		assert Math.abs(x) < LIMIT && Math.abs(y) < LIMIT && Math.abs(z) < LIMIT;
 	}
 
 	@Override
 	public int hashCode() {
-		assert assertClassInvariant();
+		assertClassInvariant();
 		double oldX = x, oldY = y, oldZ = z;
 		
 		final int prime = 31;
@@ -59,56 +65,60 @@ public class CartesianCoordinate extends AbstractCoordinate{
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		
 		assert oldX == x && oldY == y && oldZ == z;	//post-condition
-		assert assertClassInvariant();
+		assertClassInvariant();
 		return result;
 	}
 
 	public double getX() {
-		assert assertClassInvariant();
+		assertClassInvariant();
 		return x;
 	}
 
 	public double getY() {
-		assert assertClassInvariant();
+		assertClassInvariant();
 		return y;
 	}
 
 	protected void setX(double x) {
+		if(Math.abs(x) > LIMIT) throw new IllegalArgumentException("Tried to set to illegal x value");
 		this.x = x;
-		assert assertClassInvariant();
+		assertClassInvariant();
 	}
 
 	protected void setY(double y) {
+		if(Math.abs(y) > LIMIT) throw new IllegalArgumentException("Tried to set to illegal y value");
 		this.y = y;
-		assert assertClassInvariant();
+		assertClassInvariant();
 	}
 
 	protected void setZ(double z) {
+		if(Math.abs(z) > LIMIT) throw new IllegalArgumentException("Tried to set to illegal z value");
 		this.z = z;
-		assert assertClassInvariant();
+		assertClassInvariant();
 	}
 
 	public double getZ() {
-		assert assertClassInvariant();
+		assertClassInvariant();
 		return z;
 	}
 
 	@Override
 	public CartesianCoordinate asCartesianCoordinate() {
-		assert assertClassInvariant();
+		assertClassInvariant();
 		return this;
 	}
 
 	@Override
 	public SphericCoordinate asSphericCoordinate() {
-		assert assertClassInvariant();
-		double oldX = x, oldY = y, oldZ = z;
+		assertClassInvariant();
+		double oldX = x, oldY = y, oldZ = z;	//for post-condition
+		
 		double radius = Math.sqrt(x*x + y*y + z*z);
 		double latitude = Math.acos(z/radius);
 		double longitude = Math.atan(y/x);
 		
 		assert oldX == x && oldY == y && oldZ == z;	//post-condition
-		assert assertClassInvariant();
+		assertClassInvariant();
 		return new SphericCoordinate(latitude, longitude, radius);
 	}
 

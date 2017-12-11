@@ -30,35 +30,41 @@ public class SphericCoordinate extends AbstractCoordinate {
 	
 
 	public SphericCoordinate(double latitude, double longitude, double radius) {
-		this.latitude = latitude;
-		this.longitude = longitude;
-		this.radius = radius;
-		assert assertClassInvariant();
+		try {
+			setLatitude(latitude);
+			setLongitude(longitude);
+			setRadius(radius);
+		} catch (IllegalArgumentException e) {
+			latitude = 0;
+			longitude = 0;
+			radius = 0;
+		}
+		assertClassInvariant();
 	}
 	
 	//tests for realistic values in coordinate values
-	private boolean assertClassInvariant() {
-		return Math.abs(latitude) <= 90 && Math.abs(longitude) <= 180 
+	private void assertClassInvariant() {
+		assert Math.abs(latitude) <= 90 && Math.abs(longitude) <= 180 
 				&& radius > 0 && radius < 15e6;
 	}
 	public double getLatitude() {
-		assert assertClassInvariant();
+		 assertClassInvariant();
 		return latitude;
 	}
 
 	public double getLongitude() {
-		assert assertClassInvariant();
+		assertClassInvariant();
 		return longitude;
 	}
 
 	public double getRadius() {
-		assert assertClassInvariant();
+		assertClassInvariant();
 		return radius;
 	}
 
 	@Override
 	public CartesianCoordinate asCartesianCoordinate() {
-		assert assertClassInvariant();
+		assertClassInvariant();
 		double oldLat = latitude, oldLong = longitude, oldRad = radius;
 		
 		double convertedX = radius * Math.sin(latitude) * Math.cos(longitude);
@@ -71,13 +77,13 @@ public class SphericCoordinate extends AbstractCoordinate {
 
 	@Override
 	public SphericCoordinate asSphericCoordinate() {
-		assert assertClassInvariant();
+		assertClassInvariant();
 		return this;
 	}
 
 	@Override
 	public int hashCode() {
-		assert assertClassInvariant();
+		assertClassInvariant();
 		double oldLat = latitude, oldLong = longitude, oldRad = radius;
 		final int prime = 31;
 		int result = 1;
@@ -89,23 +95,26 @@ public class SphericCoordinate extends AbstractCoordinate {
 		temp = Double.doubleToLongBits(radius);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		assert oldLat == latitude && oldLong == longitude && oldRad == radius;
-		assert assertClassInvariant();
+		assertClassInvariant();
 		return result;
 	}
 
-	protected void setLatitude(double latitude) {
+	protected void setLatitude (double latitude) throws IllegalArgumentException {
+		if(Math.abs(latitude) > 90) throw new IllegalArgumentException("Tried to set to illegal latitude value");
 		this.latitude = latitude;
-		assert assertClassInvariant();
+		assertClassInvariant();
 	}
 
-	protected void setLongitude(double longitude) {
+	protected void setLongitude(double longitude) throws IllegalArgumentException {
+		if(Math.abs(latitude) > 180) throw new IllegalArgumentException("Tried to set to illegal longitude value");
 		this.longitude = longitude;
-		assert assertClassInvariant();
+		assertClassInvariant();
 	}
 
-	protected void setRadius(double radius) {
+	protected void setRadius(double radius) throws IllegalArgumentException {
+		if(radius < 0 || radius > 15e6) throw new IllegalArgumentException("Tried to set to illegal latitude value");
 		this.radius = radius;
-		assert assertClassInvariant();
+		assertClassInvariant();
 	}
 
 }
