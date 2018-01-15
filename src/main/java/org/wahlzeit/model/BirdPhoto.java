@@ -2,36 +2,22 @@ package org.wahlzeit.model;
 
 public class BirdPhoto extends Photo{
 	
-	public final String birdType;
+	public Bird bird;
 	
 	/**
 	 * @methodtype constructor
 	 */
-	public BirdPhoto() {
-		this("General");
-	}
-	
-	/**
-	 * @methodtype constructor
-	 */
-	public BirdPhoto(PhotoId myID) {
-		this("General", myID);
-	}
-	
-	/**
-	 * @methodtype constructor
-	 */
-	public BirdPhoto(String birdType) {
+	public BirdPhoto(Bird bird) {
 		super();
-		this.birdType = birdType;
+		this.bird = bird;
 	}
 	
 	/**
 	 * @methodtype constructor
 	 */
-	public BirdPhoto(String birdType, PhotoId myID) {
+	public BirdPhoto(Bird bird, PhotoId myID) {
 		super(myID);
-		this.birdType = birdType;
+		this.bird = bird;
 	}
 	
 	
